@@ -13,6 +13,7 @@ TOKEN = os.getenv('TOKEN')
 df = pd.read_csv('whalesWithClusters.csv')
 
 app = Dash(__name__)
+server = app.server #for render.com
 
 app.layout = html.Div([
     html.H1(children='Cetaceans of the Azores', style={'textAlign':'center'}),
