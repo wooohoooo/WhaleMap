@@ -51,6 +51,7 @@ def update_graph(species, year, tuna):
         df_tuna = df_tuna[df_tuna.year==int(year)]
 
 
+
     print(dff.shape)
 
     fig = px.scatter_mapbox(dff,
