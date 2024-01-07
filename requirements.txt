@@ -1,0 +1,4 @@
+dash
+plotly_express==0.4.0
+pandas
+python-dotenv
