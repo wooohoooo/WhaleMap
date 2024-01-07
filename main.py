@@ -5,7 +5,6 @@ import numpy as np
 
 import os
 from dotenv import load_dotenv
-import dash_daq as daq
 
 load_dotenv()
 
