@@ -19,30 +19,37 @@ app.layout = html.Div([
     html.H1(children='Cetaceans of the Azores', style={'textAlign':'center'}),
     dcc.Graph(id='graph-content'),
     dcc.Dropdown(np.append(df.scientificname.unique(), 'None'), 'None', id='dropdown-selection'),
+    dcc.Dropdown(np.append(df.year.unique(), 'None'), 'None', id='test'),
 
 ])
 
 @callback(
     Output('graph-content', 'figure'),
     Input('dropdown-selection', 'value'),
+    Input('test', 'value'),
 )
-def update_graph(value):
+def update_graph(species, year):
+    print(species)
 
 
     dff = df.sort_values('year')
-
-    if value != 'None':
-        dff = df[df.scientificname==value]
-
-
-    print(dff.shape)
     dff.loc[:, 'cluster_str']  = dff.loc[:,'cluster'].astype(str)
+    dff.loc[:, 'year_str']  = dff.loc[:,'year'].astype(str)
+
+    if species != 'None':
+        dff = dff[dff.scientificname==species]
+
+    if year != 'None':
+        print(year, dff.year.unique())
+        dff = dff[df.year==int(year)]
+    print(dff.shape)
+    #dff.loc[:, 'cluster_str']  = dff.loc[:,'cluster'].astype(str)
 
     fig = px.scatter_mapbox(dff,
                             lat='decimallatitude', lon='decimallongitude',
                             color='cluster_str',
                             color_discrete_sequence=px.colors.qualitative.Alphabet,
-                            animation_frame='year',
+                            #animation_frame='year',
                             size='depht_positive',
                             zoom=5,
                             height=800,
