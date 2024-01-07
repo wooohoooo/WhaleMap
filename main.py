@@ -37,6 +37,7 @@ app.layout = html.Div([
 def update_graph(species, year, tuna):
     print(species)
 
+    df_tuna = pd.read_csv('Tuna.csv')
 
     dff = df.sort_values('year')
     dff.loc[:, 'cluster_str']  = dff.loc[:,'cluster'].astype(str)
@@ -46,7 +47,9 @@ def update_graph(species, year, tuna):
         dff = dff[dff.scientificname==species]
     if year != 'None':
         print(year, dff.year.unique())
-        dff = dff[df.year==int(year)]
+        dff = dff[dff.year==int(year)]
+        df_tuna = df_tuna[df_tuna.year==int(year)]
+
 
     print(dff.shape)
 
