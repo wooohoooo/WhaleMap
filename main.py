@@ -19,8 +19,11 @@ server = app.server #for render.com
 app.layout = html.Div([
     html.H1(children='Cetaceans of the Azores', style={'textAlign':'center'}),
     dcc.Graph(id='graph-content'),
+    html.H3(children='Genus', style={'textAlign': 'left'}),
     dcc.Dropdown(np.append(df.scientificname.unique(), 'None'), 'None', id='dropdown-selection'),
+    html.H3(children='year', style={'textAlign': 'left'}),
     dcc.Dropdown(np.append(df.year.unique(), 'None'), 'None', id='test'),
+    html.H3(children='Show Tuna', style={'textAlign': 'left'}),
     dcc.Dropdown(['True','False'],'False', id='tuna'),
 
 ])
@@ -53,8 +56,8 @@ def update_graph(species, year, tuna):
                             color_discrete_sequence=px.colors.qualitative.Alphabet,
                             #animation_frame='year',
                             size='depht_positive',
-                            zoom=5,
-                            height=800,
+                            zoom=4,
+                            height=700,
                             #width=1650
                             )
 
@@ -69,7 +72,7 @@ def update_graph(species, year, tuna):
 
         fig2 = px.scatter_mapbox(df_tuna,
                                  lat='decimallatitude', lon='decimallongitude',
-                                 zoom=5,
+                                 zoom=4,
                                  opacity=.05)
         fig.add_trace(fig2.data[0])  # adds the line trace to the first figure
 
