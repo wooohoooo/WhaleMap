@@ -5,12 +5,14 @@ import numpy as np
 
 import os
 from dotenv import load_dotenv
+import dash_daq as daq
 
 load_dotenv()
 
 TOKEN = os.getenv('TOKEN')
 
 df = pd.read_csv('whalesWithClusters.csv')
+df_tuna = pd.read_csv('Tuna.csv')
 
 app = Dash(__name__)
 server = app.server #for render.com
@@ -20,6 +22,7 @@ app.layout = html.Div([
     dcc.Graph(id='graph-content'),
     dcc.Dropdown(np.append(df.scientificname.unique(), 'None'), 'None', id='dropdown-selection'),
     dcc.Dropdown(np.append(df.year.unique(), 'None'), 'None', id='test'),
+    dcc.Dropdown(['True','False'],'False', id='tuna'),
 
 ])
 
@@ -27,8 +30,9 @@ app.layout = html.Div([
     Output('graph-content', 'figure'),
     Input('dropdown-selection', 'value'),
     Input('test', 'value'),
+    Input('tuna', 'value'),
 )
-def update_graph(species, year):
+def update_graph(species, year, tuna):
     print(species)
 
 
@@ -38,12 +42,11 @@ def update_graph(species, year):
 
     if species != 'None':
         dff = dff[dff.scientificname==species]
-
     if year != 'None':
         print(year, dff.year.unique())
         dff = dff[df.year==int(year)]
+
     print(dff.shape)
-    #dff.loc[:, 'cluster_str']  = dff.loc[:,'cluster'].astype(str)
 
     fig = px.scatter_mapbox(dff,
                             lat='decimallatitude', lon='decimallongitude',
@@ -57,30 +60,24 @@ def update_graph(species, year):
                             )
 
 
-    #fig.update_layout(mapbox_style="light", mapbox_accesstoken=token)
+    print('tuna',tuna)
+    if tuna == 'True':
+
+        # if year != 'None':
+        #     df_tuna = df_tuna[df_tuna.year == int(year)]
+        #     print('test')
+
+
+        fig2 = px.scatter_mapbox(df_tuna,
+                                 lat='decimallatitude', lon='decimallongitude',
+                                 zoom=5,
+                                 opacity=.05)
+        fig.add_trace(fig2.data[0])  # adds the line trace to the first figure
+
     fig.update_layout(mapbox_style="open-street-map", mapbox_accesstoken=TOKEN)
-    #fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
     fig.update_geos(lataxis_showgrid=True, lonaxis_showgrid=True)
 
-    # fig.update_layout(
-    #     legend=dict(
-    #         x=0,
-    #         y=1,
-    #         traceorder="reversed",
-    #         title_font_family="Times New Roman",
-    #         font=dict(
-    #             family="Courier",
-    #             size=12,
-    #             color="black"
-    #         ),
-    #         bgcolor="LightSteelBlue",
-    #         bordercolor="Black",
-    #         borderwidth=2
-    #     )
-    # )
-
     return fig
-   # return px.line(dff, x='year', y='pop')
 
 if __name__ == '__main__':
     app.run(debug=True)
