@@ -25,7 +25,7 @@ app.layout = html.Div([
     html.H3(children='year', style={'textAlign': 'left'}),
     dcc.Dropdown(np.append(df.year.unique(), 'None'), 'None', id='test'),
     html.H3(children='Show Tuna', style={'textAlign': 'left'}),
-    dcc.Dropdown(['True','False'],'True', id='tuna'),
+    dcc.Dropdown(['True','False'],'False', id='tuna'),
 
 ])
 
