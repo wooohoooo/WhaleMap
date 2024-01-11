@@ -47,7 +47,7 @@ def update_graph(species, year, tuna):#, df_tuna=df_tuna):
 
 
     dff = df.sort_values('year')
-    #df_tuna = df_tuna.sort_values('year')
+    dff_tuna = df_tuna.sort_values('year')
 
     dff.loc[:, 'cluster_str']  = dff.loc[:,'cluster'].astype(str)
     dff.loc[:, 'year_str']  = dff.loc[:,'year'].astype(str)
@@ -58,7 +58,8 @@ def update_graph(species, year, tuna):#, df_tuna=df_tuna):
 
         print(year, dff.year.unique())
         dff = dff[dff.year==int(year)]
-        df_tuna = df_tuna[df_tuna.year==int(year)]
+        dff_tuna = df_tuna[df_tuna.year==int(year)]
+        print(dff_tuna.shape)
 
 
     print(dff.shape)
@@ -86,7 +87,7 @@ def update_graph(species, year, tuna):#, df_tuna=df_tuna):
         #     print('test')
 
 
-        fig2 = px.scatter_mapbox(df_tuna,
+        fig2 = px.scatter_mapbox(dff_tuna,
                                  lat='decimallatitude', lon='decimallongitude',
                                  zoom=4,
                                  opacity=.25,
